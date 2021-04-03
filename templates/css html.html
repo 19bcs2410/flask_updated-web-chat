@@ -1,0 +1,113 @@
+
+<html>
+  <head>
+      <link rel = "shortcut icon" href = "/static/img/r.ico"  />
+    <title>Temperature Convertor</title>
+ <style>
+h1{
+
+color:red;
+font-size:40;
+text-align:center;
+text-decoration:underline;
+text-decoration:blink;
+text-transform:capitalize;
+text-shadow:4px 10px 8px black;
+
+}
+h2{
+color:red;
+text-align:center;
+font-size:30;
+text-transform:capitalize;
+text-shadow:4px 10px 8px black;
+
+}
+#i1{
+ background-color: #4CAF50;
+  color: white;
+width=100%
+height:150px;
+ margin: 4px 2px;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+}
+#i2{
+background-color: #4CAF50;
+  color: white;
+width=100%
+height:150px;
+ margin: 4px 2px;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+
+}
+
+#i3{
+background-color: #4CAF50;
+  color: white;
+width=100%
+height:150px;
+ margin: 4px 2px;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+
+}
+#i4{
+background-color: #4CAF50;
+  color: white;
+width=100%
+height:150px;
+ margin: 4px 2px;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+
+}
+
+body{
+background-color:#203647
+}
+
+
+</style>
+</head>
+ <body >
+
+<h1>Temperature Convertor</h1>
+<h2>Select Conversion</h2>
+
+<form action='/cf' method='get'>
+<div style="text-align: center">
+<input  type='submit' id='i1' value='celsius-Farenheit' align="center"  />
+</div>
+</form>
+<br>
+
+<form action='/fc' mehtod='get'>
+<div style="text-align: center">
+<input type='submit'  id='i2'  value='Farenheit-celsius'  />
+</div>
+</form>
+<br>
+
+<form action='/ck' method='get'>
+<div style="text-align: center">
+<input type='submit'  id='i3' value='celsius-kelvin' />
+</div>
+</form>
+<br>
+<form action='/kc' method='get'>
+<div style="text-align: center">
+<input type='submit'  id='i4' value='kelvin-celsius' />
+</div>
+</form>
+
+
+
+
+  </body>
+</html>

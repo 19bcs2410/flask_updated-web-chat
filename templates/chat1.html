@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Chat</title>
+    <style>
+h1{
+  color:red;
+font-size:40;
+text-align:center;
+text-decoration:underline;
+text-decoration:blink;
+text-transform:capitalize;
+text-shadow:4px 10px 8px black;
+
+}
+.container{
+dislpay:flex;
+}
+
+
+#m1{
+ border: 5px outset red;
+            background-color: red;
+            text-align: center;
+
+}
+
+.c5{
+flex:2;
+ border: 5px outset #9fa8a3;
+            background-color:#e6e9f0;
+            text-align: justify;
+color:#090A0A;
+overflow:auto;
+
+length:500px;
+width:500px;
+margin-left:auto;
+
+
+}
+
+#message_input{
+background-color: #F1F1EF;
+  color: black;
+width=100%
+height:150px;
+ margin: 4px 2px;
+ padding: 16px 32px;
+border: 5px solid #555;
+  
+
+}
+
+#b1{
+
+  background-color:#173e43;
+  color:#dddfd4;
+width=100%
+height:150px;
+ margin: 4px 2px;
+ padding: 16px 32px;
+border: 5px solid #F6F6F8;
+
+
+
+}
+
+#b2{
+
+
+  background-color:#173e43;
+  color:#dddfd4;
+width=100%
+height:150px;
+ margin: auto;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+
+
+
+}
+#b3{
+
+  background-color:#173e43;
+  color:#dddfd4;
+overflow:auto;
+width=100%
+height:150px;
+ margin: auto;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+
+}
+#b4{
+
+  background-color:#173e43;
+  color: #dddfd4;
+width=100%
+height:150px;
+ margin: auto;
+ padding: 16px 32px;
+border: 5px solid #555;
+
+
+}
+.c1{
+position:fixed;
+border: 5px outset #9fa8a3;
+            background-color: #c5d5cb;
+            text-align: center;
+overflow:auto;
+color:white;
+length:1000px;
+width:500px;
+margin-left:auto;
+
+
+
+}
+
+.c2{
+
+border: 5px outset #9fa8a3;
+            background-color: white;
+            text-align: center;
+length:auto;
+width:150px;
+margin:auto;
+
+
+
+}
+
+.c3{
+border: 5px outset #9fa8a3;
+            background-color: white;
+            text-align: center;
+length:auto;
+width:150px;
+margin:auto;
+
+}
+
+.c4{
+border: 5px outset #9fa8a3;
+            background-color: white;
+            text-align: center;
+length:auto;
+width:150px;
+margin:auto;
+
+}
+body{
+  background-image:url(/static/img/back.jpg)
+
+}
+  
+    
+    
+    </style>
+</head>
+<body>
+<h1 >Welcome {{username}}</h1>
+<div id="m1"></div>
+
+
+
+
+
+
+<div class="container">
+<div class="c1" >
+    <form id="message_form">
+    <input  type="text" placeholder="Enter Massage Here" id="message_input" name="message" /><br>
+    <button id="b1"  type="submit">Send</button><br>
+    </form>
+
+</div>
+<div class="c5"  id="message"></div>
+
+</div>
+
+
+<div class="c2">
+
+    <form id="leave_form">
+        <button id="b2" type="submit">Leave Room</button><br>
+    </form>
+
+</div>
+<br>
+<div class="c3">
+    <form  action="/again_join_url/{{username}}" method="post">
+
+        <button id='b3' type="submit">Join Another Room</button>
+
+    </form>
+
+</div>
+<br>
+
+<div class="c4">
+    <form id="online">
+
+        <button id="b4" type="submit">Onlie Members</button>
+
+    </form>
+</div>
+
+
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    socket=io.connect("http://localhost:5001")
+    socket.on('connect',function(){
+    socket.emit('join_room',{room:"{{room}}",username:"{{username}}"})
+    });
+
+
+
+
+
+    message=document.getElementById('message_input')
+    document.getElementById('message_form').onsubmit=function(e){
+
+    e.preventDefault();
+    str_message=message.value.trim();
+    if (str_message.length){
+    socket.emit('send_message',{username:"{{username}}",room:"{{room}}",message:str_message})
+    }
+    message.value="";
+    message.focus();
+    };
+
+
+    document.getElementById('leave_form').onsubmit=function(f){
+    f.preventDefault();
+    socket.emit('leave_room',{room:"{{room}}",username:"{{username}}"});
+    };
+
+     document.getElementById('online').onsubmit=function(f){
+    f.preventDefault();
+    socket.emit('show_online',{room:"{{room}}",username:"{{username}}"});
+    };
+
+    socket.on('already',function(data){
+
+    if("{{username}}"==data['username']){
+
+     new_message_div=document.createElement('div');
+      new_message_div.innerHTML='You : Already in This Group';
+    document.getElementById('message').appendChild(new_message_div);
+
+
+
+    }
+
+    });
+
+
+    socket.on('online_result',function(data){
+
+    if("{{username}}"==data['username']){
+
+     new_message_div=document.createElement('div');
+      new_message_div.innerHTML='Online Members <br> '+data['result'];
+    document.getElementById('message').appendChild(new_message_div);
+
+    }
+
+
+
+    });
+
+
+
+
+    socket.on('leaved_room',function(data){
+
+    new_message_div=document.createElement('div');
+    
+
+    if("{{username}}"==data['username']){
+    new_message_div.innerHTML='You : '+'Exited From Room';
+    document.getElementById('message').appendChild(new_message_div);
+    };
+
+    if("{{username}}"!=data['username']){
+    new_message_div.innerHTML=data['username']+' : '+'Exited From Room';
+    document.getElementById('message').appendChild(new_message_div);
+    }
+    });
+
+
+
+
+
+
+
+
+
+    socket.on('receive_msg',function(data){
+
+
+    new_message_div=document.createElement('div');
+
+    if("{{username}}"==data['username']){
+    new_message_div.innerHTML='You : '+data['message'];
+    document.getElementById('message').appendChild(new_message_div);
+    };
+
+    if("{{username}}"!=data['username']){
+    new_message_div.innerHTML=data['username']+' : '+data['message'];
+    document.getElementById('message').appendChild(new_message_div);
+    };
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    socket.on('room_joined' ,function(data){
+    new_message_div=document.createElement('div');
+
+    if("{{username}}"==data['username']){
+    new_message_div.innerHTML='You : Joined Room '+data['room'];
+    document.getElementById('message').appendChild(new_message_div);
+    };
+
+    if("{{username}}"!=data['username']){
+    new_message_div.innerHTML=data['username']+': Joined Room '+data['room'];
+    document.getElementById('message').appendChild(new_message_div);
+    }
+
+
+    });
+
+
+
+
+</script>
+
+</html>
